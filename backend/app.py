@@ -66,5 +66,10 @@ def chat():
         "media": media_link,
     })
 
+@app.route("/test", methods=["GET"]) 
+def test():
+    return jsonify({"message": "Hello World from Flask!"})
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
