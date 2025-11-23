@@ -60,6 +60,11 @@ def chat():
     if need_pdf:
         pdf_path = generate_pdf(response_text)
         media_link = upload_pdf_to_cloudinary(pdf_path)
+        
+        try:
+            os.remove(pdf_path)
+        except Exception as e:
+            print("Error deleting file:", e)
 
     return jsonify({
         "reply": response_text,
