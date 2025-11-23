@@ -15,38 +15,72 @@ export default function ChatWindow() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  // const handleSend = async (text) => {
+  //   const userMsg = { sender: "user", text };
+  //   setMessages((prev) => [...prev, userMsg]);
+
+  //   setLoading(true);
+
+  //   try {
+  //     const res = await sendMessage(text);
+
+  //     const botMsg = {
+  //       sender: "bot",
+  //       text: res.data.reply,
+  //       media: res.data.media, // For PDFs, reports, links
+  //       mediaType: res.data.type, // "pdf", "url", etc.
+  //     };
+
+  //     // const botMsg = {
+  //     //   sender: "bot",
+  //     //   text: "Yo Jayakrishna, Hii",
+  //     //   media: "/test.pdf",
+  //     // };
+
+  //     setMessages((prev) => [...prev, botMsg]);
+  //   } catch (e) {
+  //     console.error(e);
+
+  //     const errorMsg = {
+  //       sender: "bot",
+  //       text: "⚠️ Something went wrong while processing your request.\nPlease try again.",
+  //     };
+
+  //     setMessages((prev) => [...prev, errorMsg]);
+  //   }
+
+  //   setLoading(false);
+  // };
+
   const handleSend = async (text) => {
     const userMsg = { sender: "user", text };
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
 
+    setMessages(updatedMessages);
     setLoading(true);
 
     try {
-      const res = await sendMessage(text);
+      // Convert React messages → LLM format
+      const historyPayload = updatedMessages.map((m) => ({
+        role: m.sender === "user" ? "user" : "bot",
+        content: m.text,
+      }));
+
+      const res = await sendMessage(text, historyPayload);
 
       const botMsg = {
         sender: "bot",
         text: res.data.reply,
-        media: res.data.media, // For PDFs, reports, links
-        mediaType: res.data.type, // "pdf", "url", etc.
+        media: res.data.media || null,
       };
 
-      // const botMsg = {
-      //   sender: "bot",
-      //   text: "Yo Jayakrishna, Hii",
-      //   media: "/test.pdf",
-      // };
-
-      setMessages((prev) => [...prev, botMsg]);
-    } catch (e) {
-      console.error(e);
-
-      const errorMsg = {
-        sender: "bot",
-        text: "⚠️ Something went wrong while processing your request.\nPlease try again.",
-      };
-
-      setMessages((prev) => [...prev, errorMsg]);
+      setMessages([...updatedMessages, botMsg]);
+    } catch (err) {
+      console.error(err);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "⚠️ Something went wrong." },
+      ]);
     }
 
     setLoading(false);
