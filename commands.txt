@@ -1,10 +1,12 @@
 frontend:
 ----------
+cd frontend
 npm i
 npm run dev
 
 backend
 --------
+cd backend
 python -m venv venv
 venv\Scripts\activate
 
