@@ -4,7 +4,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-8">
       <div className="max-w-3xl text-center">
-        <h1 className="text-5xl font-extrabold text-gray-800 mb-6">
+        <h1 className="text-5xl font-extrabold text-red-800 mb-6 ">
           Company Crawler
         </h1>
         <p className="text-lg text-gray-600 mb-8 leading-relaxed">
