@@ -1,7 +1,13 @@
-import React from "react";
+import ChatWindow from "./components/ChatWindow";
 
-const Chat = () => {
-  return <div>Chat</div>;
-};
+export default function Chat() {
+  return (
+    <div className="h-screen flex flex-col bg-gray-100">
+      <div className="p-4 shadow bg-white">
+        <h1 className="text-2xl font-bold text-gray-800">Crawler - Chat</h1>
+      </div>
 
-export default Chat;
+      <ChatWindow />
+    </div>
+  );
+}
